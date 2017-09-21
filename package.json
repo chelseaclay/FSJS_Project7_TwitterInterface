@@ -1,0 +1,17 @@
+{
+  "name": "project7_twitterinterface",
+  "version": "1.0.0",
+  "description": "In this project, you'll use Twitter’s REST API to access your Twitter profile information and render it to a user.",
+  "main": "js/app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Chelsea Clay",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.18.1",
+    "express": "^4.15.4",
+    "pug": "^2.0.0-rc.4",
+    "twit": "^2.2.9"
+  }
+}
