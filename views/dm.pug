@@ -1,0 +1,17 @@
+.grid-33
+  .app--section
+    ul.app--message--list
+      li
+        h3
+          | Recent Messages
+        ul.app--message--conversation
+          each messageItem in twitInfo.dm
+            li.app--message
+              a.app--tweet--author(href=`https://twitter.com/${messageItem.username}`)
+                .app--avatar(style=`background-image: url(${messageItem.userImg})`)
+                  img(src=`${messageItem.userImg}`)
+                h4#dmName= messageItem.name
+                span#dmUsername  @#{messageItem.username}
+                br
+                p.app--message--text= messageItem.message
+                p#messageTimestamp.app--message--timestamp= messageItem.time

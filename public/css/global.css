@@ -2308,14 +2308,16 @@ a:hover .app--avatar {
   line-height: 1.4;
 }
 /* line 144, ../sass/global.sass */
-.app--tweet--timestamp, .app--user--timestamp {
-  float: right;
-  color: #ccc;
+
+#timelineStamp{
+  font-size: 1.2rem;
+  color: #999;
 }
 /* line 148, ../sass/global.sass */
 .app--tweet--author, .app--user--author {
   color: #7dc9f8;
-  display: block;
+  display: inline;
+  text-decoration: none;
 }
 /* line 151, ../sass/global.sass */
 .app--tweet--author:hover, .app--user--author:hover {
@@ -2331,6 +2333,24 @@ a:hover .app--avatar {
   margin: 0;
   font-size: 1.6rem;
 }
+
+#dmName {
+  margin-left: -4.2em;
+  display: inline-block;
+  margin-bottom: 0.25em;
+}
+
+#dmUsername {
+  display: inline-block;
+  margin-left: 0.5em;
+}
+
+#messageTimestamp {
+  font-size: 1.2rem;
+  color: #999;
+  margin-top: 0.5em;
+}
+
 /* line 160, ../sass/global.sass */
 .app--tweet--actions, .app--user--actions {
   margin-bottom: -5px;
@@ -2410,6 +2430,12 @@ a:hover .app--avatar {
 .app--message--list, .app--message--conversation {
   list-style: none;
 }
+
+.app--message--conversation > li{
+  border-bottom: 1px solid #e1e1e1;
+  width: 110%;
+  margin-left: -1.5em;
+}
 /* line 210, ../sass/global.sass */
 .app--message--list .app--avatar, .app--message--conversation .app--avatar {
   position: absolute;
@@ -2420,7 +2446,7 @@ a:hover .app--avatar {
 .app--message--list > li {
   padding: 15px 20px;
   margin: 0;
-  border-bottom: 4px solid #f1f1f1;
+  /*border-bottom: 4px solid #f1f1f1;*/
 }
 /* line 220, ../sass/global.sass */
 .app--message--list h3 {
@@ -2463,12 +2489,12 @@ a:hover .app--avatar {
 /* line 252, ../sass/global.sass */
 .app--message {
   padding: 0 0 10px;
-  padding-left: 70px;
+  padding-left: 6.3em;
   position: relative;
 }
 /* line 256, ../sass/global.sass */
 .app--message .app--avatar {
-  left: 0;
+  left: 1.5em;
 }
 /* line 258, ../sass/global.sass */
 .app--message--me {

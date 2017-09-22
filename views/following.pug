@@ -1,0 +1,14 @@
+.grid-33
+        .app--section
+          ul.app--user--list
+            each friendItem in twitInfo.friends
+              li
+                .circle--fluid
+                  .circle--fluid--cell.circle--fluid--primary
+                    a.app--tweet--author(href=`https://twitter.com/${friendItem.username}`)
+                      .app--avatar(style=`background-image: url(${friendItem.userImg})`)
+                        img(src=`${friendItem.userImg}`)
+                      h4= friendItem.name
+                      p= friendItem.username
+                  .circle--fluid--cell
+                    a.button.button-text Unfollow
