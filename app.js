@@ -16,8 +16,6 @@ const twitInfo = {};
   twitInfo.friends = [];
   twitInfo.dm = [];
 
-// app.use(bodyParser.urlencoded({ extended: false }));
-
 app.use('/static', express.static('public'));
 
 app.set('view engine', 'pug');
@@ -25,7 +23,7 @@ app.set('view engine', 'pug');
 //Get my Twitter info and set up array to push to
 T.get('account/verify_credentials', { skip_status: true })
 .catch(function (err) {
-  console.log('caught error', err.stack)
+  console.log('caught error', err.message)
 })
 .then(function (result) {
 
@@ -39,7 +37,7 @@ T.get('account/verify_credentials', { skip_status: true })
 //Get my last 5 tweets and push to array set up previously
 T.get('https://api.twitter.com/1.1/statuses/user_timeline.json', [user_id=twitInfo.id, count=5])
 .catch(function (err) {
-  console.log('caught error', err.stack)
+  console.log('caught error', err.message)
 })
 .then(function (result) {
   for (var i = 0; i < result.data.length; i++) {
@@ -57,7 +55,7 @@ T.get('https://api.twitter.com/1.1/statuses/user_timeline.json', [user_id=twitIn
 //Get my last 5 friends and push to array set up previously
 T.get('https://api.twitter.com/1.1/friends/list.json', [user_id=twitInfo.id, count=5])
 .catch(function (err) {
-  console.log('caught error', err.stack)
+  console.log('caught error', err.message)
 })
 .then(function (result) {
   for (var i = 0; i < result.data.users.length; i++) {
@@ -73,7 +71,7 @@ T.get('https://api.twitter.com/1.1/friends/list.json', [user_id=twitInfo.id, cou
 //Get my last 5 DMs and push to array set up previously
 T.get('https://api.twitter.com/1.1/direct_messages.json', [count=5])
 .catch(function (err) {
-  console.log('caught error', err.stack)
+  console.log('caught error', err.message)
 })
 .then(function (result) {
   for (var i = 0; i < result.data.length; i++) {
