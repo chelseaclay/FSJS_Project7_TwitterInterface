@@ -10,11 +10,13 @@ const T = new Twit({
 });
 const bodyParser = require('body-parser');
 
-
 const twitInfo = {};
   twitInfo.tweets = [];
   twitInfo.friends = [];
   twitInfo.dm = [];
+
+
+app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use('/static', express.static('public'));
 
@@ -35,22 +37,27 @@ T.get('account/verify_credentials', { skip_status: true })
 });
 
 //Get my last 5 tweets and push to array set up previously
-T.get('https://api.twitter.com/1.1/statuses/user_timeline.json', [user_id=twitInfo.id, count=5])
-.catch(function (err) {
-  console.log('caught error', err.message)
-})
-.then(function (result) {
-  for (var i = 0; i < result.data.length; i++) {
-    var tweetData = {
-      date: result.data[i].created_at,
-      tweet: result.data[i].text,
-      likes: result.data[i].favorite_count,
-      retweets: result.data[i].retweet_count,
-      idStr: result.data[i].id_str
-    };
-    twitInfo.tweets.push(tweetData);
-  }
-});
+  T.get('https://api.twitter.com/1.1/statuses/user_timeline.json', [user_id=twitInfo.id, count=5])
+  .catch(function (err) {
+    console.log('caught error', err.message)
+  })
+  .then(function (result) {
+    var tweetData = {};
+    for (var i = 0; i < result.data.length; i++) {
+      tweetData = {
+        date: result.data[i].created_at,
+        tweet: result.data[i].text,
+        likes: result.data[i].favorite_count,
+        retweets: result.data[i].retweet_count,
+        idStr: result.data[i].id_str
+      };
+      if (typeof result.data[i].retweeted_status !== "undefined") {
+        tweetData.likes = result.data[i].retweeted_status.favorite_count;
+      }
+      twitInfo.tweets.push(tweetData);
+    }
+
+  });
 
 //Get my last 5 friends and push to array set up previously
 T.get('https://api.twitter.com/1.1/friends/list.json', [user_id=twitInfo.id, count=5])
@@ -88,7 +95,6 @@ T.get('https://api.twitter.com/1.1/direct_messages.json', [count=5])
 
 app.use("/", (req, res, next) => {
   res.render('index', {twitInfo});
-  // console.log(twitInfo);
   next();
 });
 
