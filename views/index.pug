@@ -1,6 +1,7 @@
 extends layout.pug
 
 block main
+  include header.pug
   .app--tweet
     form(action='/', method='post')
       .circle--fluid
@@ -10,5 +11,5 @@ block main
           textarea#tweet-textarea.circle--textarea--input(placeholder="What's happening?")
           strong#tweet-char.app--tweet--char 140
         .circle--fluid--cell.align-bottom
-          button.button-primary(type='submit') Tweet
+          button#userTweet.button-primary(type='submit') Tweet
   include appBody.pug

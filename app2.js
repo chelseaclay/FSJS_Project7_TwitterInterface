@@ -9,8 +9,7 @@ const T = new Twit({
   access_token_secret:  config.access_token_secret
 });
 const bodyParser = require('body-parser');
-const server = require("http").createServer(app);
-const io = require("socket.io")(server);
+
 const twitInfo = {};
   twitInfo.tweets = [];
   twitInfo.friends = [];
@@ -18,27 +17,29 @@ const twitInfo = {};
 
 
 app.use(bodyParser.urlencoded({ extended: false }));
+
 app.use('/static', express.static('public'));
+
 app.set('view engine', 'pug');
 
 //Get my Twitter info and set up array to push to
 T.get('account/verify_credentials', { skip_status: true })
 .catch(function (err) {
-  next(err);
+  console.log('caught error', err.message)
 })
 .then(function (result) {
+
   twitInfo.id = result.data.id;
   twitInfo.username = result.data.screen_name;
   twitInfo.name = result.data.name;
   twitInfo.following = result.data.friends_count;
   twitInfo.userImg = result.data.profile_image_url;
-  twitInfo.backgroundImg = result.data.profile_banner_url;
 });
 
 //Get my last 5 tweets and push to array set up previously
   T.get('https://api.twitter.com/1.1/statuses/user_timeline.json', [user_id=twitInfo.id, count=5])
   .catch(function (err) {
-    next(err);
+    console.log('caught error', err.message)
   })
   .then(function (result) {
     var tweetData = {};
@@ -77,7 +78,7 @@ T.get('https://api.twitter.com/1.1/friends/list.json', [user_id=twitInfo.id, cou
 //Get my last 5 DMs and push to array set up previously
 T.get('https://api.twitter.com/1.1/direct_messages.json', [count=5])
 .catch(function (err) {
-  next(err);
+  console.log('caught error', err.message)
 })
 .then(function (result) {
   for (var i = 0; i < result.data.length; i++) {
@@ -92,47 +93,11 @@ T.get('https://api.twitter.com/1.1/direct_messages.json', [count=5])
   }
 });
 
-app.get("/", function (req, res, next) {
+app.use("/", (req, res, next) => {
   res.render('index', {twitInfo});
-  //send socet information to build new tweet
-  io.on('connection', function (socket) {
-        socket.emit('sendUsername', twitInfo.username);
-        socket.emit('sendName', twitInfo.name);
-        socket.emit('sendProfileImg', twitInfo.userImg);
-    });
+  next();
 });
 
-//Socet.io for real time updates
-io.sockets.on('connection', function(socket) {
-  socket.on('message', function(message){
-    socket.on('message', function (inputMessage) {
-      //twit to post new tweet to twitter
-      T.post('statuses/update', {status: inputMessage}, function (err, data, response) {
-        if (err) {
-          next(err);
-        }
-      });
-    });
-  });
-});
-
-//page errors
-app.use(function (req, res, next) {
-    var err = new Error('Page Not Found');
-    err.status = 404;
-    next(err);
-});
-app.use(function (req, res, next) {
-    var err = new Error('Internal server error');
-    err.status = 500;
-    next(err);
-});
-app.use(function (err, req, res, next) {
-    res.locals.error = err;
-    res.status(err.status);
-    res.render('error', err);
-});
-
-server.listen(3000, function () {
-    console.log('application is running on port 3000');
+app.listen(3000, () => {
+  console.log("application is running on port 3000");
 });
